@@ -1,35 +1,41 @@
 import * as express from 'express';
 import { Sequelize, Model, DataTypes, BuildOptions } from 'sequelize';
+import EntradaController from './controller/EntradaController';
 
 const app = express();
 const port = 3000;
 
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
+
 app.get('/', (req, res, next) => {
-  res.send('Hello World!')
+  res.send('Bem vindo à API de estacionamento!')
 })
 
 app.listen(port, () => console.log(`Escutando na porta ${port}`))
 
-const sequelize = new Sequelize('postgres://postgres:postgres@localhost:5432/estacionamento');
+const entradaController = new EntradaController()
 
-class Entrada extends Model {
-  public id!: number; 
-  public placa!: string;
-  public hora: string;
+app.get('/entrada', (req, res, next) => {
+  entradaController
+    .fetchAll()
+    .then(entradas => res.send(entradas))  
+})
 
-  public readonly createdAt!: Date;
-  public readonly updatedAt!: Date;
-}
+app.post('/entrada', (req, res, next) => {
+  const { placa } = req.body
+  const hora = new Date().toISOString()
+  entradaController
+    .save({
+      placa,
+      hora
+    })
+    .then(entrada => res.send(entrada))
+})
 
-Entrada.init({
-  id: {
-    type: DataTypes.INTEGER,
-    autoIncrement: true,
-    primaryKey: true,
-  },
-  placa: new DataTypes.STRING(8),
-  hora: DataTypes.TIME
-}, {tableName: 'entradas', sequelize, timestamps: false})
-
-Entrada.findAll().then(c => console.log(c))
-
+app.post('/saida', (req, res, next) => {
+  const { placa } = req.body
+  entradaController
+    .fetchLastEntradaByPlaca(placa)
+    .then(entrada => res.send(entrada))
+})
