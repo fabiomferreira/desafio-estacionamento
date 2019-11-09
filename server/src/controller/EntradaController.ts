@@ -3,6 +3,12 @@ import { Op, fn, col } from 'sequelize'
 
 export default class EntradaController {
   public save(entrada) {
+    const errorResponse = { error: 'Placa inválida' }
+    if (!/^[A-Z]{3}-\d{4}$/g.test(entrada.placa)) 
+      return Promise.reject(errorResponse)
+
+    const placaLetras = entrada.placa.slice()
+
     return Entrada.create(entrada)
   }
 
@@ -11,8 +17,8 @@ export default class EntradaController {
   }
 
   public fetchLastEntradaByPlaca(placa) {
-    return Entrada.findAll({ 
-      where: { 
+    return Entrada.findAll({
+      where: {
         placa: { [Op.eq]: placa },
 
       },

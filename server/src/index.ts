@@ -23,14 +23,21 @@ app.get('/entrada', (req, res, next) => {
 })
 
 app.post('/entrada', (req, res, next) => {
-  const { placa } = req.body
+  const { placa, cor, modelo } = req.body
   const hora = new Date().toISOString()
+
   entradaController
     .save({
       placa,
+      cor,
+      modelo,
       hora
     })
     .then(entrada => res.send(entrada))
+    .catch(e => {
+      res.statusCode = 400
+      res.send(e)
+    })
 })
 
 app.post('/saida', (req, res, next) => {
