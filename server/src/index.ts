@@ -3,6 +3,7 @@ import { Sequelize, Model, DataTypes, BuildOptions } from 'sequelize';
 import EntradaController from './controller/EntradaController';
 import SaidaController from './controller/SaidaController';
 
+
 const app = express();
 const port = 3000;
 
