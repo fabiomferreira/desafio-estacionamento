@@ -1,6 +1,7 @@
 import * as express from 'express';
 import { Sequelize, Model, DataTypes, BuildOptions } from 'sequelize';
 import EntradaController from './controller/EntradaController';
+import SaidaController from './controller/SaidaController';
 
 const app = express();
 const port = 3000;
@@ -15,6 +16,7 @@ app.get('/', (req, res, next) => {
 app.listen(port, () => console.log(`Escutando na porta ${port}`))
 
 const entradaController = new EntradaController()
+const saidaController = new SaidaController()
 
 app.get('/entrada', (req, res, next) => {
   entradaController
@@ -24,14 +26,13 @@ app.get('/entrada', (req, res, next) => {
 
 app.post('/entrada', (req, res, next) => {
   const { placa, cor, modelo } = req.body
-  const hora = new Date().toISOString()
 
   entradaController
     .save({
       placa,
       cor,
       modelo,
-      hora
+      ativo: true
     })
     .then(entrada => res.send(entrada))
     .catch(e => {
@@ -42,7 +43,11 @@ app.post('/entrada', (req, res, next) => {
 
 app.post('/saida', (req, res, next) => {
   const { placa } = req.body
-  entradaController
-    .fetchLastEntradaByPlaca(placa)
-    .then(entrada => res.send(entrada))
+  saidaController
+    .save(placa)
+    .then(saida => res.send(saida))
+    .catch(e => {
+      res.statusCode = 400
+      res.send(e)
+    })
 })
