@@ -1,8 +1,5 @@
 import Entrada from '../model/Entrada'
-import { Op, fn, col } from 'sequelize'
-
-const horarioAbertura = 8
-const horarioFechamento = 18
+import { Op } from 'sequelize'
 
 const estaNoHorarioDeFuncionamento = () => {
   const agora = new Date()
@@ -36,7 +33,11 @@ export default class EntradaController {
   }
 
   public fetchAll() {
-    return Entrada.findAll()
+    return Entrada.findAll({
+      where: {
+        ativo: {[Op.eq]: true}
+      }
+    })
   }
 
   public fetchLastEntradaByPlaca(placa): Promise<Entrada> {

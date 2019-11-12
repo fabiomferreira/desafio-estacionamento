@@ -49,6 +49,17 @@ app.post('/entrada', (req, res, next) => {
     })
 })
 
+app.get('/saida', (req, res, next) => {
+  const { inicio, fim } = req.query
+  saidaController
+    .gerarRelatorio(inicio, fim)
+    .then(valor => res.send({valor}))
+    .catch(e => {
+      res.statusCode = 400
+      res.send(e)
+    })
+})
+
 app.post('/saida', (req, res, next) => {
   const { placa } = req.body
   saidaController

@@ -1,6 +1,7 @@
 import Saida from '../model/Saida'
 import EntradaController from './EntradaController'
 import * as moment from 'moment'
+import { Op } from 'sequelize'
 
 const tabelaDePrecos = [
   2.00,
@@ -52,5 +53,13 @@ export default class SaidaController {
             return saida
           })
       })
+  }
+
+  public gerarRelatorio(inicio, fim) {
+    return Saida.sum('valor',{
+      where:{
+        hora: {[Op.between]: [inicio, fim]}
+      }
+    })
   }
 }
