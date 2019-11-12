@@ -16,7 +16,7 @@ const calculaValorEstacionamento = (hora) => {
 
   const diaDaSemana = agora.weekday()
 
-  if(diaDaSemana > 0 diaDaSemana < 6)
+  if(diaDaSemana > 0 && diaDaSemana < 6)
     return horas * tabelaDePrecos[3]
 
   return horas * tabelaDePrecos[0]

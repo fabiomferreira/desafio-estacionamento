@@ -1,15 +1,15 @@
 import * as express from 'express';
-import { Sequelize, Model, DataTypes, BuildOptions } from 'sequelize';
 import EntradaController from './controller/EntradaController';
 import SaidaController from './controller/SaidaController';
 
+process.env.TZ = 'Pacific/Honolulu'
 
 const app = express();
 const port = 3000;
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
-app.use(function(req, res, next) {
+app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*"); 
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
