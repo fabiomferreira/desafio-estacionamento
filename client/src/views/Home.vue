@@ -61,14 +61,17 @@ export default {
     salvar () {
       const { placa, cor, modelo, tipoEntrada } = this
 
-      if (tipoEntrada === 1) {
+      if (parseInt(tipoEntrada) === 1) {
         if (!placa || !cor || !modelo) {
           alert('Dados obrigatórios não preenchidos ou inválidos')
           return
         }
         axios
           .post('http://localhost:3000/entrada', { placa, cor, modelo })
-          .then(response => alert('Veículo entrou com sucesso!'))
+          .then(response => {
+            this.limparForm()
+            alert('Veículo entrou com sucesso!')
+          })
           .catch(e => alert(e.response.data.error))
       } else {
         if (!placa) {
@@ -79,11 +82,22 @@ export default {
           .post('http://localhost:3000/saida', { placa })
           .then(response => {
             this.exibeValor = true
-            this.valor = response.valor
+            this.valor = response.data.valor
           })
           .catch(e => alert(e.response.data.error))
       }
+    },
+    limparForm () {
+      this.placa = ''
+      this.cor = ''
+      this.modelo = ''
     }
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.notification {
+  margin-top: 1rem;
+}
+</style>

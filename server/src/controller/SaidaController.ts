@@ -11,15 +11,23 @@ const tabelaDePrecos = [
 const calculaValorEstacionamento = (hora) => {
   const agora = moment();
   const horaEntrada = moment(hora)
-
-  const horas = agora.diff(horaEntrada, 'hours') + 1
-
+  const meioDia = moment().hour(12).minutes(0)
+  const minutos = agora.diff(horaEntrada, 'minutes')
   const diaDaSemana = agora.weekday()
+  let valor = 0
 
-  if(diaDaSemana > 0 && diaDaSemana < 6)
-    return horas * tabelaDePrecos[3]
+  if(diaDaSemana > 0 && diaDaSemana < 6) {
+    if (horaEntrada.hour() < 12 && agora.hour() > 12) {
+      const minutosAteMeioDia = meioDia.diff(horaEntrada, 'minutes')
+      const minutosAposMeioDia = agora.diff(meioDia, 'minutes')
+      valor += minutosAteMeioDia * (tabelaDePrecos[0] / 60)
+      valor += minutosAposMeioDia * (tabelaDePrecos[1] / 60)
+      return valor
+    }
+    return minutos * tabelaDePrecos[1]
+  }
 
-  return horas * tabelaDePrecos[0]
+  return minutos * (tabelaDePrecos[2] / 60)
 }
 
 export default class SaidaController {
