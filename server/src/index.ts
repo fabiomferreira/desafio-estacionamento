@@ -2,8 +2,6 @@ import * as express from 'express';
 import EntradaController from './controller/EntradaController';
 import SaidaController from './controller/SaidaController';
 
-process.env.TZ = 'Pacific/Honolulu'
-
 const app = express();
 const port = 3000;
 
