@@ -1,5 +1,11 @@
 <template>
   <div class="home">
+    <h1 class="title">Cadastro</h1>
+    <h2 class="subtitle">Cadastre entrada e saída de veículos</h2>
+    <div v-if="exibeAlerta" class="notification" :class="estadoNotificacao">
+      <button class="delete" @click="exibeAlerta = false"></button>
+      {{ mensagemNotificacao }}
+    </div>
     <form @submit.prevent="salvar">
       <div class="control">
         <label class="radio">
@@ -31,9 +37,9 @@
           </div>
         </div>
       </template>
-      <button class="button is-success">Salvar</button>
+      <button class="button is-success is-pulled-right">Salvar</button>
     </form>
-    <div v-if="exibeValor" class="notification is-info">
+    <div v-if="exibeValor" class="notification is-info mensagem-valor">
       <button class="delete" @click="exibeValor = false"></button>
       Valor: {{valor}}
     </div>
@@ -55,7 +61,10 @@ export default {
     cor: '',
     modelo: '',
     exibeValor: false,
-    valor: ''
+    valor: '',
+    exibeAlerta: false,
+    estadoNotificacao: '',
+    mensagemNotificacao: ''
   }),
   methods: {
     salvar () {
@@ -63,19 +72,21 @@ export default {
 
       if (parseInt(tipoEntrada) === 1) {
         if (!placa || !cor || !modelo) {
-          alert('Dados obrigatórios não preenchidos ou inválidos')
+          this.exibirAlerta('Dados obrigatórios não preenchidos ou inválidos', 'danger')
           return
         }
         axios
           .post('http://localhost:3000/entrada', { placa, cor, modelo })
           .then(response => {
             this.limparForm()
-            alert('Veículo entrou com sucesso!')
+            this.exibirAlerta('Veículo entrou com sucesso!', 'success')
           })
-          .catch(e => alert(e.response.data.error))
+          .catch(e => {
+            this.exibirAlerta(e.response.data.error, 'danger')
+          })
       } else {
         if (!placa) {
-          alert('Dados obrigatórios não preenchidos ou inválidos')
+          this.exibirAlerta('Dados obrigatórios não preenchidos ou inválidos', 'danger')
           return
         }
         axios
@@ -84,20 +95,27 @@ export default {
             this.exibeValor = true
             this.valor = response.data.valor
           })
-          .catch(e => alert(e.response.data.error))
+          .catch(e => {
+            this.exibirAlerta(e.response.data.error, 'danger')
+          })
       }
     },
     limparForm () {
       this.placa = ''
       this.cor = ''
       this.modelo = ''
+    },
+    exibirAlerta (mensagem, estado) {
+      this.exibeAlerta = true
+      this.mensagemNotificacao = mensagem
+      this.estadoNotificacao = 'is-' + estado
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.notification {
-  margin-top: 1rem;
+.mensagem-valor {
+  margin-top: 4rem;
 }
 </style>

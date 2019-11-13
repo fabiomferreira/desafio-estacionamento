@@ -23,4 +23,4 @@ Saida.init({
 
 Saida.belongsTo(Entrada, {as: 'entrada'})
 
-Saida.sync()
+Entrada.sync().then(() => Saida.sync())

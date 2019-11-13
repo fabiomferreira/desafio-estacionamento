@@ -1,12 +1,8 @@
 <template>
   <div id="app">
     <nav id="nav" role="navigation" class="navbar">
-      <div class="navbar-menu">
-        <div class="navbar-start">
           <router-link class="navbar-item" to="/">Home</router-link>
-          <router-link class="navbar-item" to="/about">About</router-link>
-        </div>
-      </div>
+          <router-link class="navbar-item" to="/relatorio">Relatório</router-link>
     </nav>
     <div class="container is-fluid">
       <router-view/>

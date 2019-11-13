@@ -25,7 +25,7 @@ const calculaValorEstacionamento = (hora) => {
       valor += minutosAposMeioDia * (tabelaDePrecos[1] / 60)
       return valor
     }
-    return minutos * tabelaDePrecos[1]
+    return minutos * (tabelaDePrecos[1] / 60)
   }
 
   return minutos * (tabelaDePrecos[2] / 60)
@@ -56,6 +56,11 @@ export default class SaidaController {
   }
 
   public gerarRelatorio(inicio, fim) {
+    if (!inicio || !fim) return Promise.reject({ error: 'Data de início e fim são obrigatórios.'})
+
+    if (moment(fim).diff(moment(inicio), 'days') < 0)
+      return Promise.reject({ error: 'Data fim deve ser maior ou igual data início.' })
+
     return Saida.sum('valor',{
       where:{
         hora: {[Op.between]: [inicio, fim]}

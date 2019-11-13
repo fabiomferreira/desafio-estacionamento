@@ -26,5 +26,3 @@ Entrada.init({
   },
   ativo: DataTypes.BOOLEAN
 }, { tableName: 'entradas', sequelize})
-
-Entrada.sync()
