@@ -1,0 +1,1 @@
+{"version":3,"file":"VeiculoController.js","sourceRoot":"","sources":["../../src/controller/VeiculoController.ts"],"names":[],"mappings":";;AACA,8CAAsC;AAEtC,MAAqB,iBAAiB;IAC7B,IAAI,CAAC,OAAY;QACtB,OAAO,iBAAO,CAAC,MAAM,CAAC,OAAO,CAAC,CAAA;IAChC,CAAC;IAEM,QAAQ;QACb,OAAO,iBAAO,CAAC,OAAO,EAAE,CAAA;IAC1B,CAAC;CACF;AARD,oCAQC"}
