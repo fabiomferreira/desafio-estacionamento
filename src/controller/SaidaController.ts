@@ -17,7 +17,7 @@ const calculaValorEstacionamento = (hora) => {
   const diaDaSemana = agora.weekday()
   let valor = 0
 
-  if(diaDaSemana > 0 && diaDaSemana < 6) {
+  if (diaDaSemana > 0 && diaDaSemana < 6) {
     if (horaEntrada.hour() < 12 && agora.hour() > 12) {
       const minutosAteMeioDia = meioDia.diff(horaEntrada, 'minutes')
       const minutosAposMeioDia = agora.diff(meioDia, 'minutes')
@@ -55,15 +55,15 @@ export default class SaidaController {
       })
   }
 
-  public gerarRelatorio(inicio, fim) {
-    if (!inicio || !fim) return Promise.reject({ error: 'Data de início e fim são obrigatórios.'})
+  public gerarRelatorio(inicio, fim): Promise<number> {
+    if (!inicio || !fim) return Promise.reject({ error: 'Data de início e fim são obrigatórios.' })
 
     if (moment(fim).diff(moment(inicio), 'days') < 0)
       return Promise.reject({ error: 'Data fim deve ser maior ou igual data início.' })
 
-    return Saida.sum('valor',{
-      where:{
-        hora: {[Op.between]: [inicio, fim]}
+    return Saida.sum('valor', {
+      where: {
+        hora: { [Op.between]: [inicio, fim] }
       }
     })
   }
